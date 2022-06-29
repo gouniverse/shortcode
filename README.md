@@ -5,3 +5,8 @@
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/gouniverse/shortcode)](https://pkg.go.dev/github.com/gouniverse/shortcode)
 
 Shortcode implementation
+
+## Installation
+```
+go get -u github.com/gouniverse/shortcode
+```

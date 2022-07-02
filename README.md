@@ -15,13 +15,13 @@ go get -u github.com/gouniverse/shortcode
 
 Source file:
 
-```
+```html
 [myshortcode id="111"][/myshortcode]
 [myshortcode id="222"][/myshortcode]
 ```
 
 Go code
-```
+```golang
 func myShortcode(args map[string]string) string {
 	return "MY SHORTCODE WITH ID " + args["id"]
 }
@@ -30,7 +30,7 @@ parsed := sh.Render(text, "myshortcode", myShortcode)
 ```
 
 Result
-```
+```html
 MY SHORTCODE WITH ID 111
 MY SHORTCODE WITH ID 222
 ```

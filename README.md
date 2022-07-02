@@ -10,3 +10,27 @@ Shortcode implementation
 ```
 go get -u github.com/gouniverse/shortcode
 ```
+
+## Example
+
+Source file:
+
+```
+[myshortcode id="111"][/myshortcode]
+[myshortcode id="222"][/myshortcode]
+```
+
+Go code
+```
+func myShortcode(args map[string]string) string {
+	return "MY SHORTCODE WITH ID " + args["id"]
+}
+sh, err := NewShortcode(WithBrackets("[", "]"))
+parsed := sh.Render(text, "myshortcode", myShortcode)
+```
+
+Result
+```
+MY SHORTCODE WITH ID 111
+MY SHORTCODE WITH ID 222
+```

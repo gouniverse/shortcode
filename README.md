@@ -22,7 +22,7 @@ Source file:
 
 Go code
 ```golang
-func myShortcode(args map[string]string) string {
+func myShortcode(content string, args map[string]string) string {
 	return "MY SHORTCODE WITH ID " + args["id"]
 }
 sh, err := NewShortcode(WithBrackets("[", "]"))

@@ -42,7 +42,7 @@ func NewShortcode(opts ...ShortcodeOption) (*Shortcode, error) {
 	return shortcode, nil
 }
 
-func (sh Shortcode) Render(str string, shortcode string, fn func(map[string]string) string) string {
+func (sh Shortcode) Render(str string, shortcode string, fn func(string, map[string]string) string) string {
 	escapedBracketOpening := strings.ReplaceAll(sh.bracketOpening, "[", "\\[")
 	escapedBracketOpening = strings.ReplaceAll(escapedBracketOpening, "(", "\\(")
 	escapedBracketClosing := strings.ReplaceAll(sh.bracketClosing, "]", "\\]")
@@ -61,7 +61,7 @@ func (sh Shortcode) Render(str string, shortcode string, fn func(map[string]stri
 		}
 		attrs, content := match[1], match[2]
 		log.Println(attrs, content)
-		shortcodeResult := fn(attrsToArgs(attrs))
+		shortcodeResult := fn(content, attrsToArgs(attrs))
 		str = strings.Replace(str, match[0], shortcodeResult, 1)
 	}
 

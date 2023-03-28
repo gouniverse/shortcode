@@ -3,6 +3,7 @@ package shortcode
 import (
 	"errors"
 	"log"
+	"net/http"
 	"regexp"
 	"strings"
 )
@@ -50,8 +51,6 @@ func (sh Shortcode) RenderWithRequest(req *http.Request, str string, shortcode s
 	attr := `(\s+[^` + escapedBracketClosing + `]+)?`
 	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
 	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
-	// content := `([\S\s]+)`
-	// content := `([^\[]*)`
 	content := `([^` + escapedBracketClosing + `]*)`
 
 	regex := regexp.MustCompile(start + content + end)
@@ -76,8 +75,6 @@ func (sh Shortcode) Render(str string, shortcode string, fn func(string, map[str
 	attr := `(\s+[^` + escapedBracketClosing + `]+)?`
 	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
 	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
-	// content := `([\S\s]+)`
-	// content := `([^\[]*)`
 	content := `([^` + escapedBracketClosing + `]*)`
 
 	regex := regexp.MustCompile(start + content + end)

@@ -42,6 +42,32 @@ func NewShortcode(opts ...ShortcodeOption) (*Shortcode, error) {
 	return shortcode, nil
 }
 
+func (sh Shortcode) RenderWithRequest(req *http.Request, str string, shortcode string, fn func(*http.Request, string, map[string]string) string) string {
+	escapedBracketOpening := strings.ReplaceAll(sh.bracketOpening, "[", "\\[")
+	escapedBracketOpening = strings.ReplaceAll(escapedBracketOpening, "(", "\\(")
+	escapedBracketClosing := strings.ReplaceAll(sh.bracketClosing, "]", "\\]")
+	escapedBracketClosing = strings.ReplaceAll(escapedBracketClosing, ")", "\\)")
+	attr := `(\s+[^` + escapedBracketClosing + `]+)?`
+	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
+	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
+	// content := `([\S\s]+)`
+	// content := `([^\[]*)`
+	content := `([^` + escapedBracketClosing + `]*)`
+
+	regex := regexp.MustCompile(start + content + end)
+	for _, match := range regex.FindAllStringSubmatch(str, -1) {
+		if match[0] == "" {
+			continue
+		}
+		attrs, content := match[1], match[2]
+		log.Println(attrs, content)
+		shortcodeResult := fn(req, content, attrsToArgs(attrs))
+		str = strings.Replace(str, match[0], shortcodeResult, 1)
+	}
+
+	return str
+}
+
 func (sh Shortcode) Render(str string, shortcode string, fn func(string, map[string]string) string) string {
 	escapedBracketOpening := strings.ReplaceAll(sh.bracketOpening, "[", "\\[")
 	escapedBracketOpening = strings.ReplaceAll(escapedBracketOpening, "(", "\\(")

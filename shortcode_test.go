@@ -179,6 +179,32 @@ func TestInnerTextMultiline(t *testing.T) {
 	}
 }
 
+func TestInnerTextMultilineWithTags(t *testing.T) {
+	sh, err := NewShortcode(WithBrackets("<", ">"))
+
+	if err != nil {
+		t.Fatalf("Shortcode must not throw an error, but '%s'", err.Error())
+	}
+
+	text := `TEXT BEFORE <x-text id="111">
+	<a class="nav-link" href="/login">
+		Entry
+	</a>
+	</x-text> TEXT AFTER`
+
+	parsed := sh.Render(text, "x-text", testTextShortcode)
+
+	expected := `TEXT BEFORE --- SHORTCODE START: 
+	<a class="nav-link" href="/login">
+		Entry
+	</a>
+	 FROM ID 111 : SHORTCODE END --- TEXT AFTER`
+
+	if parsed != expected {
+		t.Fatalf("Expected '%s', instead returned '%s'", expected, parsed)
+	}
+}
+
 func testShortcode(content string, args map[string]string) string {
 	return "SHORTCODE WITH ID " + args["id"]
 }

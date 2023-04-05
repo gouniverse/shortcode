@@ -2,7 +2,6 @@ package shortcode
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -51,7 +50,10 @@ func (sh Shortcode) RenderWithRequest(req *http.Request, str string, shortcode s
 	attr := `(\s+[^` + escapedBracketClosing + `]+)?`
 	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
 	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
-	content := `([^` + escapedBracketClosing + `]*)`
+	//content := `([^` + escapedBracketClosing + `]*)`
+	content := `([\S\s]+.*)`
+
+	// DEBUG: log.Println(start + content + end)
 
 	regex := regexp.MustCompile(start + content + end)
 	for _, match := range regex.FindAllStringSubmatch(str, -1) {
@@ -59,7 +61,7 @@ func (sh Shortcode) RenderWithRequest(req *http.Request, str string, shortcode s
 			continue
 		}
 		attrs, content := match[1], match[2]
-		log.Println(attrs, content)
+		// DEBUG: log.Println(attrs, content)
 		shortcodeResult := fn(req, content, attrsToArgs(attrs))
 		str = strings.Replace(str, match[0], shortcodeResult, 1)
 	}
@@ -75,7 +77,8 @@ func (sh Shortcode) Render(str string, shortcode string, fn func(string, map[str
 	attr := `(\s+[^` + escapedBracketClosing + `]+)?`
 	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
 	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
-	content := `([^` + escapedBracketClosing + `]*)`
+	// content := `([^` + escapedBracketClosing + `]*)`
+	content := `([\S\s]+.*)`
 
 	regex := regexp.MustCompile(start + content + end)
 	for _, match := range regex.FindAllStringSubmatch(str, -1) {
@@ -83,7 +86,7 @@ func (sh Shortcode) Render(str string, shortcode string, fn func(string, map[str
 			continue
 		}
 		attrs, content := match[1], match[2]
-		log.Println(attrs, content)
+		// DEBUG: log.Println(attrs, content)
 		shortcodeResult := fn(content, attrsToArgs(attrs))
 		str = strings.Replace(str, match[0], shortcodeResult, 1)
 	}
@@ -99,80 +102,3 @@ func attrsToArgs(attrs string) map[string]string {
 	}
 	return args
 }
-
-// type Args map[string]string
-
-// func (sh Shortcode) Render(str string, shortcode string, fn func(map[string]string) string) string {
-// 	escapedBracketOpening := strings.ReplaceAll(sh.bracketOpening, "[", "\\[")
-// 	escapedBracketClosing := strings.ReplaceAll(sh.bracketClosing, "]", "\\]")
-// 	start := escapedBracketOpening + shortcode + `(.*)` + escapedBracketClosing
-// 	//end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
-// 	content := `([\S\s]+)`
-// 	regex := regexp.MustCompile(start + content)
-// 	//matches := re.FindAllStringSubmatch(str, -1)
-// 	//log.Println(matches)
-// 	log.Println("=============")
-// 	// log.Println(content)
-
-// 	for {
-// 		match := regex.FindStringSubmatchIndex(str)
-// 		if match == nil {
-// 			break
-// 		}
-// 		// args := Args{}
-// 		log.Println("MATCH 0:")
-// 		log.Println(match[0])
-
-// 		log.Println("MATCH 1:")
-// 		log.Println(match[1])
-
-// 		log.Println("MATCH 2:")
-// 		log.Println(match[2])
-
-// 		log.Println("MATCH 3:")
-// 		log.Println(match[3])
-
-// 		log.Println("MATCH 4:")
-// 		log.Println(match[4])
-
-// 		//openingTagStart, openingTagClose, tagNameStart, tagNameEnd := match[0], match[1], match[2], match[3]
-// 		startStr, endStr, tagNameStart, tagNameEnd := match[0], match[1], match[2], match[3]
-// 		fullMatch := str[startStr:endStr]
-// 		tagName := str[tagNameStart:tagNameEnd]
-// 		log.Println("FULL MATCH: " + fullMatch)
-// 		log.Println("TAG NAME: " + tagName)
-
-// 		// Parse the arguments
-// 		// if match[4] != -1 {
-// 		// 	argsString := str[match[4]:match[5]]
-// 		// 	argsRegex := regexp.MustCompile(`\s*([^=]+)="([^"]+)"`)
-// 		// 	for _, argMatch := range argsRegex.FindAllStringSubmatch(argsString, -1) {
-// 		// 		args[argMatch[1]] = argMatch[2]
-// 		// 	}
-// 		// }
-// 		// var closingTagEnd = openingTagClose
-// 		// var textToReplace = str[tagNameStart:tagNameEnd]
-
-// 		// replaced := fn(args)
-
-// 		// str = strings.Replace(str, textToReplace, replaced, 1)
-// 	}
-
-// 	// for _, match := range matches {
-// 	// 	log.Println("==== MATCH ====")
-// 	// 	if match[0] == "" {
-// 	// 		continue
-// 	// 	}
-// 	// 	//log.Println(match[0])
-// 	// 	// attrs := match[1]
-// 	// 	// text := (match[2])
-// 	// 	match := regex.FindStringSubmatchIndex(text)
-// 	// 	if match == nil {
-// 	// 		break
-// 	// 	}
-
-// 	// 	str = strings.Replace(str, textToReplace, replaced, 1)
-// 	// }
-
-// 	return str
-// }

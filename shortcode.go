@@ -51,7 +51,7 @@ func (sh Shortcode) RenderWithRequest(req *http.Request, str string, shortcode s
 	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
 	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
 	//content := `([^` + escapedBracketClosing + `]*)`
-	content := `([\S\s]+.*)`
+	content := `([\S\s]+?.*?)`
 
 	// DEBUG: log.Println(start + content + end)
 
@@ -78,7 +78,7 @@ func (sh Shortcode) Render(str string, shortcode string, fn func(string, map[str
 	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
 	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
 	// content := `([^` + escapedBracketClosing + `]*)`
-	content := `([\S\s]+.*)`
+	content := `([\S\s]+?.*?)`
 
 	regex := regexp.MustCompile(start + content + end)
 	for _, match := range regex.FindAllStringSubmatch(str, -1) {

@@ -4,7 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/gouniverse/shortcode)](https://goreportcard.com/report/github.com/gouniverse/shortcode)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/gouniverse/shortcode)](https://pkg.go.dev/github.com/gouniverse/shortcode)
 
-Shortcode implementation
+Shortcode implementation. Convenient for CMS content where you want to add additional functionality. Similar to the short codes, as known from WordPress.
 
 ## Installation
 ```

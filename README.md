@@ -28,16 +28,21 @@ Source file:
 </body>
 ```
 
-Go code
+Your Golang Shortcode
+
 ```golang
+// The shortode function
 func myShortcode(content string, args map[string]string) string {
 	return "MY SHORTCODE WITH ID " + args["id"]
 }
+
+// Use the shortcode
 sh, err := NewShortcode(WithBrackets("[", "]"))
 parsed := sh.Render(text, "myshortcode", myShortcode)
 ```
 
 Result
+
 ```html
 <html>
   <body>
@@ -47,11 +52,13 @@ MY SHORTCODE WITH ID 222
 </body>
 ```
 
-# Example
+# Example With Request
 
 In this example, the RenderShortocdes function find search the provided content for shortcodes.
 
 If a supported shortcode is found in the content it will render the corresponding widget.
+
+The request is passed to the shortcode and can be used, i.e. to find the authenticated user, path, etc.
 
 ```go
 func RenderShortcodes(req *http.Request, content string) string {
@@ -66,13 +73,16 @@ func RenderShortcodes(req *http.Request, content string) string {
 		"x-top-menu-user-dropdown": widgets.NewTopMenuDropdownWidget().Render,
 		"x-website-header":         widgets.NewWebsiteHeader().Render,
 	}
+
 	sh, err := shortcode.NewShortcode(shortcode.WithBrackets("<", ">"))
 	if err != nil {
 		return content
 	}
+
 	for k, v := range shortcodes {
 		content = sh.RenderWithRequest(req, content, k, v)
 	}
+
 	return content
 }
 ```

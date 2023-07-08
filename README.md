@@ -4,7 +4,11 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/gouniverse/shortcode)](https://goreportcard.com/report/github.com/gouniverse/shortcode)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/gouniverse/shortcode)](https://pkg.go.dev/github.com/gouniverse/shortcode)
 
-Shortcode implementation. Convenient for CMS content where you want to add additional functionality. Similar to the short codes, as known from WordPress.
+## Introduction
+
+Shortcodes are a powerful feature that allow you to do complex things with little effort. They allow you to embed interactive elements to your webpages or to create complex page layouts with just one line of code.
+
+They are very convenient for using in CMS systems, where you may want to give the editors capability to insert complext components, that are usually managed by the backend.
 
 ## Installation
 ```
@@ -16,8 +20,12 @@ go get -u github.com/gouniverse/shortcode
 Source file:
 
 ```html
+<html>
+  <body>
 [myshortcode id="111"][/myshortcode]
 [myshortcode id="222"][/myshortcode]
+  </body>
+</body>
 ```
 
 Go code
@@ -31,8 +39,12 @@ parsed := sh.Render(text, "myshortcode", myShortcode)
 
 Result
 ```html
+<html>
+  <body>
 MY SHORTCODE WITH ID 111
 MY SHORTCODE WITH ID 222
+  </body>
+</body>
 ```
 
 # Example

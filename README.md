@@ -34,3 +34,33 @@ Result
 MY SHORTCODE WITH ID 111
 MY SHORTCODE WITH ID 222
 ```
+
+# Example
+
+In this example, the RenderShortocdes function find search the provided content for shortcodes.
+
+If a supported shortcode is found in the content it will render the corresponding widget.
+
+```go
+func RenderShortcodes(req *http.Request, content string) string {
+	shortcodes := map[string]func(*http.Request, string, map[string]string) string{
+		"x-latest-blogs":           widgets.NewLatestBlogsWidget().Render,
+		"x-course-list":            widgets.NewCourseListWidget().Render,
+		"x-flash-message":          widgets.NewFlashMessageWidget().Render,
+		"x-language-dropdown":      widgets.NewLanguageDropdownWidget().Render,
+		"x-login-form":             widgets.NewLoginFormWidget().Render,
+		"x-register-form":          widgets.NewRegisterFormWidget().Render,
+		"x-forgot-password-form":   widgets.NewForgotPasswordFormWidget().Render,
+		"x-top-menu-user-dropdown": widgets.NewTopMenuDropdownWidget().Render,
+		"x-website-header":         widgets.NewWebsiteHeader().Render,
+	}
+	sh, err := shortcode.NewShortcode(shortcode.WithBrackets("<", ">"))
+	if err != nil {
+		return content
+	}
+	for k, v := range shortcodes {
+		content = sh.RenderWithRequest(req, content, k, v)
+	}
+	return content
+}
+```

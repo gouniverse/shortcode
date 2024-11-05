@@ -51,7 +51,8 @@ func (sh Shortcode) RenderWithRequest(req *http.Request, str string, shortcode s
 	start := escapedBracketOpening + shortcode + attr + escapedBracketClosing
 	end := escapedBracketOpening + `/` + shortcode + escapedBracketClosing
 	//content := `([^` + escapedBracketClosing + `]*)`
-	content := `([\S\s]+?.*?|\s?)`
+	//content := `([\S\s]+?.*?|\s?)`
+	content := `([^~]*?)`
 
 	// DEBUG: log.Println(start + content + end)
 
